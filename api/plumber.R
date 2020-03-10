@@ -1,5 +1,5 @@
 library(biggr)
-
+library(tidyr)
 use_condaenv(condaenv = 'r-reticulate')
 
 configure_aws(
@@ -136,19 +136,23 @@ function(req, res) {
     #
     # instance_storage = as.numeric(instance_storage)
 
-    security_group_list()
+    
     # Run the algorithm
     tic()
-    response$data <- security_group_list()
+    response$data <-  security_group_data() %>% 
+      group_by(group_name, group_id) %>% 
+      nest %>% 
+      toJSON(pretty = T)
+    
     timer <- toc(quiet = T)
     response$metaData$runtime <- as.numeric(timer$toc - timer$tic)
-
+    print(response)
     return(response)
   },
   error = function(err) {
     response$statusCode <- 400
     response$message <- paste(err)
-
+    print(response)
     return(response)
   })
 
