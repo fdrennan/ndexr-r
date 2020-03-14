@@ -130,15 +130,8 @@ function(req, res) {
 
   response <- tryCatch({
 
-    # token <-
-    #   user_token %>%
-    #   jwt_decode_hmac('secret')
-    #
-    # instance_storage = as.numeric(instance_storage)
-
-    
-    # Run the algorithm
     tic()
+    
     response$data <-  security_group_data() %>% 
       group_by(group_name, group_id) %>% 
       nest %>% 
